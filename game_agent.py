@@ -188,6 +188,26 @@ class MinimaxPlayer(IsolationPlayer):
 
         # Return the best move from the last completed search iteration
         return best_move
+    
+    
+    def min_value(self,game,depth):
+        if depth == 1:
+            return self.score(game.forecast_move(m),self)
+        v = float("inf")
+        else:
+            for m in game.get_legal_moves():
+                v = min(v, max_value(game.forecast_move(m),depth-1))
+            return v
+        
+    def max_value(self,game,depth):
+        if depth == 1:
+            return self.score(game.forecast_move(m),self)
+        v = float("-inf")
+        else:
+            for m in game.get_legal_moves():
+                v = max(v, min_value(game.forecast_move(m),depth-1))
+            return v
+           
 
     def minimax(self, game, depth):
         """Implement depth-limited minimax search algorithm as described in
@@ -232,7 +252,20 @@ class MinimaxPlayer(IsolationPlayer):
             raise SearchTimeout()
 
         # TODO: finish this function!
-        raise NotImplementedError
+        best_score = float("-inf")
+        best_move = None
+        Dep = depth
+        for m in game.get_legal_moves():
+            if Dep == 1:
+                v = 
+            else 
+                Dep = Dep -1
+        
+        
+        
+                
+            
+            
 
 
 class AlphaBetaPlayer(IsolationPlayer):
