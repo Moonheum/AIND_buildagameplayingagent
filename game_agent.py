@@ -254,13 +254,12 @@ class MinimaxPlayer(IsolationPlayer):
         # TODO: finish this function!
         best_score = float("-inf")
         best_move = None
-        Dep = depth
         for m in game.get_legal_moves():
-            if Dep == 1:
-                v = 
-            else 
-                Dep = Dep -1
-        
+            v = min_value(game.forecast_move(m),depth)
+            if v > best_score:
+                best_score =v
+                best_move =m
+        return best_move
         
         
                 
