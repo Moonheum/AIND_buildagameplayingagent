@@ -37,11 +37,16 @@ def custom_score(game, player):
     # TODO: finish this function!
     if game.is_loser(player):
         return float("-inf")
-
+    
     if game.is_winner(player):
         return float("inf")
-
-    return 0.
+    
+    own_moves = len(game.get_legal_moves(player))
+    opp_moves = len(game.get_legal_moves(game.get_opponent(player)))
+    w, h = game.width / 2., game.height / 2.
+    y, x = game.get_player_location(player)
+    
+    return float(0.5*own_moves - 0.5*opp_moves + ((h - y)**2 + (w - x)**2))
 
 
 def custom_score_2(game, player):
@@ -256,8 +261,8 @@ class MinimaxPlayer(IsolationPlayer):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
         
-        if len(game.get_legal_moves())==0:
-            return (-1, -1)
+        if not game.get_legal_moves():
+            return (-1,-1)
 
         # TODO: finish this function!
         best_score = float("-inf")
@@ -314,11 +319,9 @@ class AlphaBetaPlayer(IsolationPlayer):
         self.time_left = time_left
 
         # TODO: finish this function!
-
-        # Initialize the best move so that this function returns something
-        # in case the search fails due to timeout
         best_move = (-1, -1)
-
+        
+      
         try:
             # The try/except block will automatically catch the exception
             # raised when the timer is about to expire.
@@ -402,20 +405,23 @@ class AlphaBetaPlayer(IsolationPlayer):
         """
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
+            
+        if not game.get_legal_moves():
+            return (-1,-1)
 
         # TODO: finish this function!
-        if len(game.get_legal_moves())==0:
-            return (-1, -1)
-
-        v = float("-inf")
+        best_score = float("-inf")
         best_move = None
         
         for m in game.get_legal_moves():
-            v = max(v, self.min_value(game.forecast_move(m), depth-1, alpha, beta))
-            if v >= beta:
+            v = self.min_value(game.forecast_move(m), depth-1, alpha, beta)
+            if v > best_score:
                 best_score = v
                 best_move = m
-                
+            if v >= beta:
+                return v
+            alpha = max(alpha , v)
+            
         return best_move
 
                
